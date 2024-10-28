@@ -1,7 +1,9 @@
 # Ex-1 IMPLEMENTATION-OF-SYMBOL-TABLE
-# AIM :
+## Name: INESH N
+## Register No : 212223220036
+# AIM:
 ## To write a C program to implement a symbol table.
-# ALGORITHM
+# ALGORITHM:
 1.	Start the program.
 2.	Get the input from the user with the terminating symbol ‘$’.
 3.	Allocate memory for the variable by dynamic memory allocation function.
@@ -10,89 +12,87 @@
 6.	The steps are repeated till ‘$’ is reached.
 7.	To reach a variable, enter the variable to be searched and symbol table has been checked for corresponding variable, the variable along with its address is displayed as result.
 8.	Stop the program. 
-# PROGRAM
-#include <stdio.h>
+# PROGRAM:
+```
+#include <stdio.h> 
+#include <ctype.h> 
+#include <string.h> 
 #include <stdlib.h>
-#include <string.h>
 
-#define MAX_SYMBOLS 100
-#define MAX_VAR_NAME 50
-
-typedef struct {
-    char name[MAX_VAR_NAME];
-    int *address;  // Pointer to the variable's memory address
-} Symbol;
-
-Symbol symbolTable[MAX_SYMBOLS];
-int symbolCount = 0;
-
-void addVariable(const char *name) {
-    if (symbolCount >= MAX_SYMBOLS) {
-        printf("Symbol table is full.\n");
-        return;
-    }
-
-    int *var = (int *)malloc(sizeof(int));
-    if (!var) {
-        printf("Memory allocation failed.\n");
-        return;
-    }
-
-    strcpy(symbolTable[symbolCount].name, name);
-    symbolTable[symbolCount].address = var;
-    symbolCount++;
-
-    printf("Variable '%s' added at address %p.\n", name, (void*)var);
-}
-
-
-void searchVariable(const char *name) {
-    for (int i = 0; i < symbolCount; i++) {
-        if (strcmp(symbolTable[i].name, name) == 0) {
-            printf("Variable '%s' found at address %p.\n", name, (void*)symbolTable[i].address);
-            return;
-        }
-    }
-    printf("Variable '%s' not found in the symbol table.\n", name);
-}
+#define MAX_EXPRESSION_SIZE 100
 
 int main() {
-    char input[MAX_VAR_NAME];
+    int i = 0, j = 0, x = 0, n, flag = 0; 
+    void *add[5];
+    char b[MAX_EXPRESSION_SIZE], d[15], c, srch;
 
-    printf("Enter variables (terminate with '$'):\n");
-    while (1) {
-        scanf("%s", input);
-        if (strcmp(input, "$") == 0) {
-            break;  // Terminate on '$'
-        }
+    // Input the expression terminated by '$'
+    printf("Enter the Expression terminated by $: ");
+    while((c = getchar()) != '$' && i < MAX_EXPRESSION_SIZE - 1) { 
+        b[i++] = c;
+    }
+    b[i] = '\0'; // Null-terminate the string
+    n = i - 1;
 
-       
-        if (input[0] >= 'a' && input[0] <= 'z') {  // Simple check for variable names
-            addVariable(input);
-        } else {
-            printf("Invalid input. Only lowercase letters are allowed for variable names.\n");
+    // Display the given expression
+    printf("Given Expression: %s\n", b);
+
+    // Symbol table heading
+    printf("\nSymbol Table\n"); 
+    printf("Symbol\taddr\ttype\n");
+
+    // Build symbol table
+    for(j = 0; j <= n; j++) { 
+        c = b[j];
+        if (isalpha((unsigned char)c)) { // Check if the character is a letter
+            if (j == n) {
+                void *p = malloc(sizeof(char)); 
+                add[x] = p;
+                d[x] = c; 
+                printf("%c\t%p\tidentifier\n", c, p);
+            } else {
+                char ch = b[j + 1];
+                if (ch == '+' || ch == '-' || ch == '*' || ch == '=') { 
+                    void *p = malloc(sizeof(char));
+                    add[x] = p;
+                    d[x] = c; 
+                    printf("%c\t%p\tidentifier\n", c, p); 
+                    x++;
+                }
+            }
         }
     }
 
-   
-    printf("Enter a variable name to search (terminate with '$'):\n");
-    while (1) {
-        scanf("%s", input);
-        if (strcmp(input, "$") == 0) {
-            break;  // Terminate on '$'
-        }
-        searchVariable(input);
-    }
-
+    // Search for a symbol
+    printf("\nThe symbol to be searched: "); 
+    getchar(); // To consume the newline character left by the previous input
+    srch = getchar();
     
-    for (int i = 0; i < symbolCount; i++) {
-        free(symbolTable[i].address);  // Free each allocated variable
+    for(i = 0; i <= x; i++) { 
+        if (srch == d[i]) {
+            printf("Symbol Found\n"); 
+            printf("%c @ address %p\n", srch, add[i]); 
+            flag = 1;
+        }
+    }
+
+    if(flag == 0) {
+        printf("Symbol Not Found\n");
+    }
+
+    // Free dynamically allocated memory
+    for (i = 0; i <= x; i++) {
+        free(add[i]);
     }
 
     return 0;
 }
+```
+# OUTPUT:
 
-# OUTPUT
-The program will prompt you to enter variable names. When you enter $, it will stop accepting new variables and will then prompt you to search for any variable in the symbol table. It will show the address of the variable if found.
-# RESULT
+![Screenshot 2024-10-17 144724](https://github.com/user-attachments/assets/b129e593-045e-4d55-9780-f0c2def769fa)
+
+
+# RESULT:
 The program to implement a symbol table is executed and the output is verified.
+
